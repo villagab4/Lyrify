@@ -25,7 +25,7 @@ public class MainActivity extends Activity implements SpotifyPlayer.Notification
     private static final String REDIRECT_URI = "lyrify://callback";
 
     // Request code that will be used to verify if the result comes from correct activity
-    private static final int REQUEST_CODE = 3389;
+    private static final int REQUEST_CODE = 313689;
 
     private Player mPlayer;
 
@@ -39,6 +39,7 @@ public class MainActivity extends Activity implements SpotifyPlayer.Notification
 
         // Sets the list of scopes that user needs to grant
         builder.setScopes(new String[]{"user-read-private", "streaming"});
+        builder.setShowDialog(true);
         AuthenticationRequest request = builder.build();
 
         AuthenticationClient.openLoginActivity(this, REQUEST_CODE, request);
@@ -82,9 +83,6 @@ public class MainActivity extends Activity implements SpotifyPlayer.Notification
     @Override
     public void onLoggedIn() {
         Log.d("MainActivity", "User logged in");
-
-        // When user logs in, play track with the following URI
-        mPlayer.playUri(null, "spotify:track:2TpxZ7JUBn3uw46aR7qd6V", 0, 0);
     }
 
     @Override

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Lyrify</string>
+    <string name="searchHint">Search song title, lyric, or artist</string>
 </resources>
