@@ -40,4 +40,6 @@ dependencies {
     // This library is responsible for Spotify playback
     compile project(':spotify-player-24-noconnect-2.20b')
     compile 'com.google.android.gms:play-services-ads:10.2.6'
+    // This library allows for HTML parsing
+    compile 'org.jsoup:jsoup:1.10.2'
 }

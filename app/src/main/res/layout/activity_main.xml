@@ -21,23 +21,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.032" />
 
-    <ListView
-        android:layout_width="296dp"
-        android:layout_height="400dp"
-        android:clipToPadding="false"
-        android:fillViewport="false"
-        android:scrollbarStyle="insideOverlay"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.504"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/search_bar"
-        app:layout_constraintVertical_bias="1.0">
-
-    </ListView>
-
     <SearchView
-        android:id="@+id/search_bar"
+        android:id="@+id/search"
         android:background="@drawable/search_bar"
         android:queryHint="@string/searchHint"
         android:textColor="@color/black"
@@ -50,5 +35,21 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title"
         android:layout_marginTop="0dp" />
+
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="296dp"
+        android:layout_height="400dp"
+        android:clipToPadding="false"
+        android:fillViewport="false"
+        android:scrollbarStyle="insideOverlay"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/search"
+        app:layout_constraintVertical_bias="1.0">
+
+    </ListView>
 
 </android.support.constraint.ConstraintLayout>

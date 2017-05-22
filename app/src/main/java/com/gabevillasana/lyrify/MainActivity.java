@@ -1,9 +1,14 @@
 package com.gabevillasana.lyrify;
 
 import android.app.Activity;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.widget.SearchView;
 
 import com.spotify.sdk.android.authentication.AuthenticationClient;
 import com.spotify.sdk.android.authentication.AuthenticationRequest;
@@ -16,7 +21,7 @@ import com.spotify.sdk.android.player.PlayerEvent;
 import com.spotify.sdk.android.player.Spotify;
 import com.spotify.sdk.android.player.SpotifyPlayer;
 
-public class MainActivity extends Activity implements SpotifyPlayer.NotificationCallback, ConnectionStateCallback {
+public class MainActivity extends Activity implements SpotifyPlayer.NotificationCallback, ConnectionStateCallback, SearchView.OnQueryTextListener {
 
     // Client ID
     private static final String CLIENT_ID = "a3fb3dfeb5354d8e9c90ad82896f16a2";
@@ -43,6 +48,11 @@ public class MainActivity extends Activity implements SpotifyPlayer.Notification
         AuthenticationRequest request = builder.build();
 
         AuthenticationClient.openLoginActivity(this, REQUEST_CODE, request);
+
+        SearchView searchView = (SearchView) findViewById(R.id.search);
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        searchView.setQueryHint("Search song title, lyric, or artist");
+        searchView.setOnQueryTextListener(this);
     }
 
     @Override
@@ -123,5 +133,19 @@ public class MainActivity extends Activity implements SpotifyPlayer.Notification
             default:
                 break;
         }
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        Intent searchIntent = new Intent(this, SearchActivity.class);
+        searchIntent.putExtra(SearchManager.QUERY, query);
+        searchIntent.setAction(Intent.ACTION_SEARCH);
+        startActivity(searchIntent);
+        return true; // we start the search activity manually
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
     }
 }
