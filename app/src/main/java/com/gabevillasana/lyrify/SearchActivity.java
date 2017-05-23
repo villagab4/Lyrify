@@ -5,6 +5,7 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ListView;
 
 import org.jsoup.Jsoup;
@@ -12,7 +13,12 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,6 +39,10 @@ public class SearchActivity extends ListActivity {
         scraper = new WebScraper();
     }
 
+    private static String API_KEY = "AIzaSyCHi4WuRfV6H2KeaEfvhoT7ZzX3cgUQ7xE";
+    private static String SEARCH_ENGINE_ID = "000956957799242292465:llxeq3fiu8w";
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,17 +50,12 @@ public class SearchActivity extends ListActivity {
 
         //ListView list = (ListView) findViewById(R.id.list);
 
-        System.out.println("GOT HERE");
-
         // Get the intent, verify the action and get the query
         Intent intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             this.query = intent.getStringExtra(SearchManager.QUERY);
-            this.query = this.modifyQuery();
-            System.out.println("THE QUERY IS: " + this.query);
-            this.geniusSearch();
-            //this.metroSearch();
-            //this.azSearch();
+            this.query = this.modifyQuery(); // put in correct CSE format
+            this.scraper.execute(query);
         }
     }
 
@@ -73,43 +78,9 @@ public class SearchActivity extends ListActivity {
             } else mQuery += query.charAt(count);
             count++;
         }
+        mQuery = "https://www.googleapis.com/customsearch/v1?key=" + API_KEY + "&cx="
+                + SEARCH_ENGINE_ID + "&fields=items/title" + "&q=" + mQuery;
         return mQuery;
-    }
-
-    private void metroSearch() {
-        String metroURL = "http://www.google.com/#q=" + this.query + "+site:metrolyrics.com";
-        // Open HTML page
-        try {
-            this.parseWebpage(metroURL);
-        } catch (IOException e) {
-            System.out.println("Failed to parse");
-        }
-    }
-
-    private void azSearch() {
-        String azURL = "http://www.google.com/#q=" + this.query + "+site:azlyrics.com";
-        // Open HTML page
-        try {
-            this.parseWebpage(azURL);
-        } catch (IOException e) {
-            System.out.println("Failed to parse");
-        }
-    }
-
-
-    private void geniusSearch() {
-        String geniusURL = "http://www.google.com/#q=" + this.query + "+site:genius.com";
-        // Open HTML page
-        try {
-            this.parseWebpage(geniusURL);
-        } catch (IOException e) {
-            System.out.println("Failed to parse");
-        }
-    }
-
-    private void parseWebpage(String url) throws IOException {
-        System.out.println("URL TO SEARCH: " + url);
-        this.scraper.execute(url); //asynchronous task automatically populates the map
     }
 
     private class WebScraper extends AsyncTask<String, Void, String> {
@@ -118,6 +89,26 @@ public class SearchActivity extends ListActivity {
 
         @Override
         protected String doInBackground(String... urls) {
+            URL url;
+            HttpURLConnection conn;
+            try {
+                url = new URL(urls[0]);
+                conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+                System.out.println("HERE");
+                BufferedReader read = new BufferedReader(new InputStreamReader(
+                        conn.getInputStream()));
+                // TODO: Update to correclty parse JSON
+                String me;
+                while ((me = read.readLine()) != null) {
+                    System.out.println(me);
+                }
+                conn.disconnect();
+            } catch (IOException e) {
+                Log.d("Error", e.getMessage());
+                return "";
+            }
+            /**
             Document doc;
             try {
                 doc = Jsoup.connect(urls[0]).get();
@@ -133,6 +124,7 @@ public class SearchActivity extends ListActivity {
                 System.out.println(lmnt.text());
             }
             System.out.println("Count is : " + coun);
+             */
             String key = "test";
             //noinspection Since15
             SearchActivity.this.songs.put(key, SearchActivity.this.songs.getOrDefault(key, 0) + 1);

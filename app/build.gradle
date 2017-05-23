@@ -42,4 +42,8 @@ dependencies {
     compile 'com.google.android.gms:play-services-ads:10.2.6'
     // This library allows for HTML parsing
     compile 'org.jsoup:jsoup:1.10.2'
+    // This library is for Google Custom Search
+    compile 'com.google.apis:google-api-services-customsearch:v1-rev54-1.22.0'
+    compile 'com.google.code.findbugs:jsr305:2.0.1'
+    androidTestCompile 'com.google.code.findbugs:jsr305:2.0.1'
 }
